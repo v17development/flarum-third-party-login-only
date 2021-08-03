@@ -3,7 +3,10 @@ Only allow login and sign ups from oAuth extensions.
 
 If you have any feedback, let us know! Do you experience issues? You can report issues on the Flarum Forum or on [GitHub](https://github.com/v17development/flarum-third-party-login-only).
 
-> ℹ️ This extension does not add oAuth to your Flarum, but disables the `Sign In` and `Sign Up` password-forms for a better authenticating flow user experience.
+##  ℹ️ When to use this extension?
+To be clear, this extension **does not add** oAuth to your Flarum instance but instead disables the `Sign In` and `Sign Up` password-forms for a better authenticating flow user experience. Use [FoF Passport](https://discuss.flarum.org/d/5203) or [FoF oAuth](https://discuss.flarum.org/d/25182) to add oAuth to your forum.
+
+This extension is suitable for organizations or communities that only want to allow sign-in and sign-ups with external oAuth accounts/providers.
 
 ## 📥 Installation
 If you like to install this extension, run the following command:
