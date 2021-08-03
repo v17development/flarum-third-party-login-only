@@ -3,7 +3,7 @@ Only allow login and sign ups from oAuth extensions.
 
 If you have any feedback, let us know! Do you experience issues? You can report issues on the Flarum Forum or on [GitHub](https://github.com/v17development/flarum-third-party-login-only).
 
-> This extension does not add oAuth to your Flarum, but disables the `Sign In` and `Sign Up` password-forms for a better authenticating flow user experience.
+> ℹ️ This extension does not add oAuth to your Flarum, but disables the `Sign In` and `Sign Up` password-forms for a better authenticating flow user experience.
 
 ## 📥 Installation
 If you like to install this extension, run the following command:
