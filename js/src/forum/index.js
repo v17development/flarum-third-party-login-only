@@ -20,7 +20,9 @@ app.initializers.add("v17development-flarum-third-party-login-only", (app) => {
     if (this.attrs.token && app.forum.attribute("signUpWelcomeText")) {
       items.add(
         "welcome-message",
-        <p className={"SignUpWelcomeText"}>{app.forum.attribute("signUpWelcomeText")}</p>,
+        <p className={"SignUpWelcomeText"}>
+          {app.forum.attribute("signUpWelcomeText")}
+        </p>,
         99
       );
     }
