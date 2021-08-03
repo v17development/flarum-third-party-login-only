@@ -2,6 +2,7 @@
     "name": "v17development/flarum-third-party-login-only",
     "description": "Only allow login and sign ups from oAuth extensions.",
     "type": "flarum-extension",
+    "license": "MIT",
     "authors": [
         {
             "name": "V17 Development",
