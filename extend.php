@@ -19,10 +19,6 @@ return [
         ->remove('login')
         ->post('/login', 'login.disabled', Api\ApiRouteDisabledController::class)
 
-        // Disable registration
-        ->remove('register')
-        ->post('/register', 'signup.disabled', Api\ApiRouteDisabledController::class)
-
         // Disable password reset
         ->remove('savePassword')
         ->post('/reset', 'savePassword.disabled', Controller\RouteDisabledController::class)
@@ -37,7 +33,7 @@ return [
         ->post('/forgot', 'forgot.disabled', Api\ApiRouteDisabledController::class)
 
         ->remove('users.create')
-        ->post('/users', 'users.create.disabled', Api\ApiRouteDisabledController::class),
+        ->post('/users', 'users.create', Api\CreateUserController::class),
 
     // Register settings to forum
     (new Extend\Settings)
