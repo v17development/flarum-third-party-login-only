@@ -1,12 +1,21 @@
 import { extend, override } from "flarum/extend";
+import app from "flarum/forum/app";
 import LogInModal from "flarum/forum/components/LogInModal";
 import SignUpModal from "flarum/forum/components/SignUpModal";
 import HeaderSecondary from "flarum/forum/components/HeaderSecondary";
 import LogInButton from "flarum/forum/components/LogInButton";
 import SettingsPage from "flarum/forum/components/SettingsPage";
 
-app.initializers.add("v17development-flarum-third-party-login-only", (app) => {
-  // Hide login form
+app.initializers.add("v17development-flarum-third-party-login-only", () => {
+  // -----------------------------------------------------------------
+  // LogInModal: strip the password form and the footer entirely.
+  //
+  // User accounts are created by an external sync system and never have
+  // a password set, so showing a "username + password" login form or
+  // a "forgot password" / "sign up" footer would only confuse people.
+  // The server-side /login route is also disabled in extend.php, so
+  // even a hand-rolled POST will get a 403.
+  // -----------------------------------------------------------------
   extend(LogInModal.prototype, "fields", function (items) {
     items.remove("identification");
     items.remove("password");
@@ -14,93 +23,69 @@ app.initializers.add("v17development-flarum-third-party-login-only", (app) => {
     items.remove("submit");
   });
 
-  // Hide sign up form
-  extend(SignUpModal.prototype, "fields", function (items) {
-    // Add welcome message
-    if (this.attrs.token && app.forum.attribute("signUpWelcomeText")) {
-      items.add(
-        "welcome-message",
-        <p className={"SignUpWelcomeText"}>
-          {app.forum.attribute("signUpWelcomeText")}
-        </p>,
-        99
-      );
-    }
-
-    // Registration token
-    if (!this.attrs.token) {
-      items.remove("username");
-      items.remove("email");
-      items.remove("submit");
-    }
-
-    items.remove("password");
-  });
-
-  // Replace login footer
   override(LogInModal.prototype, "footer", function () {
-    if (app.forum.attribute("forgotPasswordLink") === "") return null;
-
-    return (
-      <p className="LogInModal-forgotPassword">
-        <a href={app.forum.attribute("forgotPasswordLink")} target={"_blank"}>
-          {app.translator.trans("core.forum.log_in.forgot_password_link")}
-        </a>
-      </p>
-    );
+    return null;
   });
 
-  // Replace sign up button
-  extend(HeaderSecondary.prototype, "items", function (items) {
-    if (app.forum.attribute("replaceLoginWithFoFPassport") == false) return;
+  // -----------------------------------------------------------------
+  // SignUpModal: empty it out and block submit.
+  //
+  // Public sign-up is closed (server-side /register returns 403), so
+  // the modal should never be the path a real user takes. We strip
+  // every field defensively in case some other extension opens the
+  // modal, and the onsubmit override ensures the form is never sent.
+  // -----------------------------------------------------------------
+  extend(SignUpModal.prototype, "fields", function (items) {
+    items.remove("username");
+    items.remove("email");
+    items.remove("password");
+    items.remove("submit");
+  });
 
-    // Replace sign up button
-    if (app.forum.attribute("allowSignUp")) {
+  override(SignUpModal.prototype, "onsubmit", function (original, e) {
+    e?.preventDefault?.();
+    this.loaded?.();
+    app.alerts?.show?.(
+      { type: "error" },
+      "Sign-up is disabled on this forum. Accounts are created by an external system."
+    );
+    return;
+  });
+
+  // -----------------------------------------------------------------
+  // Header: redirect both Sign In and Sign Up buttons to the oAuth
+  // login page. The `allowSignUp` check is the only forum attribute
+  // we still read — it comes from Flarum's built-in sign-up permission,
+  // not from this extension's settings.
+  // -----------------------------------------------------------------
+  extend(HeaderSecondary.prototype, "items", function (items) {
+    const replaceWith = (key, label) => {
       items.replace(
-        "signUp",
+        key,
         LogInButton.component(
           {
             className: "Button Button--link",
             path: "/auth/passport",
           },
-          app.translator.trans("core.forum.header.sign_up_link")
+          label
         )
       );
+    };
+
+    if (app.forum.attribute("allowSignUp")) {
+      replaceWith("signUp", app.translator.trans("core.forum.header.sign_up_link"));
     }
 
-    items.replace(
-      "logIn",
-      LogInButton.component(
-        {
-          className: "Button Button--link",
-          path: "/auth/passport",
-        },
-        app.translator.trans("core.forum.header.log_in_link")
-      )
-    );
+    replaceWith("logIn", app.translator.trans("core.forum.header.log_in_link"));
   });
 
-  // Remove 'Password' button
+  // -----------------------------------------------------------------
+  // Settings: users have no password (the sync system never sets one)
+  // and their email is managed in the external system too, so the
+  // "Change password" and "Change email" buttons make no sense.
+  // -----------------------------------------------------------------
   extend(SettingsPage.prototype, "accountItems", function (items) {
-    // Replace button
-    if (app.forum.attribute("changePasswordLink")) {
-      items.replace(
-        "changePassword",
-        <a
-          href={app.forum.attribute("changePasswordLink")}
-          target={"_blank"}
-          className="Button"
-        >
-          {app.translator.trans("core.forum.settings.change_password_button")}
-        </a>
-      );
-    } else {
-      items.remove("changePassword");
-    }
-
-    // Remove change mail button
-    if (app.forum.attribute("allowChangeMail") == false) {
-      items.remove("changeEmail");
-    }
+    items.remove("changePassword");
+    items.remove("changeEmail");
   });
 });

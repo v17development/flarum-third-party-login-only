@@ -1,2 +1,40 @@
-module.exports=function(e){var t={};function n(o){if(t[o])return t[o].exports;var r=t[o]={i:o,l:!1,exports:{}};return e[o].call(r.exports,r,r.exports,n),r.l=!0,r.exports}return n.m=e,n.c=t,n.d=function(e,t,o){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:o})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var o=Object.create(null);if(n.r(o),Object.defineProperty(o,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var r in e)n.d(o,r,function(t){return e[t]}.bind(null,r));return o},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="",n(n.s=8)}({3:function(e,t){e.exports=flarum.core.compat["admin/app"]},8:function(e,t,n){"use strict";n.r(t);var o=n(3),r=n.n(o);r.a.initializers.add("v17development-third-party-login-only",(function(){r.a.extensionData.for("v17development-third-party-login-only").registerSetting({label:"Replace Sign In and Sign Up button",help:m("span",null,"Replace Sign In and Sign Up button with FoF Passport login (oAuth)."," ",m("a",{href:"https://community.v17.dev/knowledgebase/41",target:"_blank"},"Read more.")),setting:"v17development-third-party-login-only.replaceLoginWithFoFPassport",type:"switch"}).registerSetting({label:"Allow user to change their email",help:m("span",null,"Allow user to change their email via user account settings."," ",m("a",{href:"https://community.v17.dev/knowledgebase/42",target:"_blank"},"Read more.")),setting:"v17development-third-party-login-only.allowChangeMail",type:"switch"}).registerSetting({label:"Forgot password link",help:m("span",null,"Replaces the forgot password link, only available if the login and registration forms aren't replaced."," ",m("a",{href:"https://community.v17.dev/knowledgebase/43",target:"_blank"},"Read more.")),setting:"v17development-third-party-login-only.forgotPasswordLink",type:"text",placeholder:"https://example.com/forgot"}).registerSetting({label:"Change password link",help:m("span",null,"Replaces the account 'Change password' button."," ",m("a",{href:"https://community.v17.dev/knowledgebase/43",target:"_blank"},"Read more.")),setting:"v17development-third-party-login-only.changePasswordLink",type:"text",placeholder:"https://example.com/account"}).registerSetting({label:"New account welcome text",help:m("span",null,"Give new users a warm welcome with a custom written welcome text."," ",m("a",{href:"https://community.v17.dev/knowledgebase/44",target:"_blank"},"Read more.")),setting:"v17development-third-party-login-only.signUpWelcomeText",type:"text",placeholder:""})}))}});
-//# sourceMappingURL=admin.js.map
+var module = (() => {
+  var __create = Object.create;
+  var __defProp = Object.defineProperty;
+  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+  var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __getProtoOf = Object.getPrototypeOf;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __commonJS = (cb, mod) => function __require() {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  };
+  var __copyProps = (to, from, except, desc) => {
+    if (from && typeof from === "object" || typeof from === "function") {
+      for (let key of __getOwnPropNames(from))
+        if (!__hasOwnProp.call(to, key) && key !== except)
+          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+    }
+    return to;
+  };
+  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
+    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+    mod
+  ));
+
+  // flarum-shim:flarum/admin/app
+  var require_app = __commonJS({
+    "flarum-shim:flarum/admin/app"(exports, module) {
+      module.exports = flarum.core.compat["admin/app"];
+    }
+  });
+
+  // src/admin/index.js
+  var import_app = __toESM(require_app());
+  import_app.default.initializers.add("v17development-third-party-login-only", () => {
+  });
+})();
+module.exports = module.exports.default || module.exports;
